@@ -68,9 +68,10 @@ func (uc *UserController) UpateUser(ctx *gin.Context) {
 func (uc *UserController) DeleteUser(ctx *gin.Context) {
 	user := ctx.Param("name")
 	if err := uc.UserService.DeleteUser(user); err != nil {
-
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
 	}
-	ctx.JSON(http.StatusOK, "Sucessfully updated") // TODO: Implement
+	ctx.JSON(http.StatusOK, "Sucessfully deleted") // TODO: Implement
 }
 
 func (uc *UserController) RegisterUserRoutes(rg *gin.RouterGroup) {
