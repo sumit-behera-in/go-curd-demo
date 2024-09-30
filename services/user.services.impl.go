@@ -71,7 +71,7 @@ func (u UserServiceImpl) DeleteUser(name string) (_ error) {
 		return err
 	}
 	if result.DeletedCount != 1 {
-		return errors.New("No match Found to delete")
+		return errors.New("no match Found to delete")
 	}
 	return nil
 }
