@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"errors"
 	"go-curd-demo/models"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -63,6 +64,14 @@ func (u UserServiceImpl) UpateUser(user *models.User) (_ error) {
 	return nil
 }
 
-func (u UserServiceImpl) DeleteUser(user *models.User) (_ error) {
+func (u UserServiceImpl) DeleteUser(name string) (_ error) {
+	query := bson.D{bson.E{Key: "userName", Value: name}}
+	result, err := u.usercollection.DeleteOne(u.ctx, query)
+	if err != nil {
+		return err
+	}
+	if result.DeletedCount != 1 {
+		return errors.New("No match Found to delete")
+	}
 	return nil
 }
