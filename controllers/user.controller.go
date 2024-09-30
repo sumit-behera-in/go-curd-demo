@@ -47,12 +47,22 @@ func (uc *UserController) GetAll(ctx *gin.Context) {
 	userSlice, err := uc.UserService.GetAll()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
 	}
 	ctx.JSON(http.StatusOK, userSlice) // TODO: Implement
 }
 
 func (uc *UserController) UpateUser(ctx *gin.Context) {
-	ctx.JSON(200, "") // TODO: Implement
+	var user models.User
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	if err := uc.UserService.UpateUser(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusAccepted, "Sucessfully updated") // TODO: Implement
 }
 
 func (uc *UserController) DeleteUser(ctx *gin.Context) {

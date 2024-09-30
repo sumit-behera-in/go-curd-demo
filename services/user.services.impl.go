@@ -52,10 +52,17 @@ func (u UserServiceImpl) GetAll() (_ []*models.User, _ error) {
 	return userslice, error
 }
 
-func (u UserServiceImpl) UpateUser(_ *models.User) (_ error) {
+func (u UserServiceImpl) UpateUser(user *models.User) (_ error) {
+	query := bson.D{bson.E{Key: "userName", Value: user.Name}}
+	update := bson.D{bson.E{Key: "$set", Value: bson.D{bson.E{Key: "userName", Value: user.Name}, bson.E{Key: "userAddress", Value: user.Address}, bson.E{Key: "userAge", Value: user.Age}}}}
+	result, err := u.usercollection.UpdateOne(u.ctx, query, update)
+	if result.MatchedCount != 1 {
+		//return errors.New("no match document found")
+		return err
+	}
 	return nil
 }
 
-func (u UserServiceImpl) DeleteUser(_ *models.User) (_ error) {
+func (u UserServiceImpl) DeleteUser(user *models.User) (_ error) {
 	return nil
 }
